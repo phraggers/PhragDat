@@ -10,3 +10,7 @@ It then reads the .DAT file and re-separates them into 2 new files, and they bot
 
 This can be used to package up game data so that libraries such as SDL2 can read using RWops,
 and users don't have to have lots of sprites, images, fonts, etc, lying around inside game data directories.
+
+Please note that:
+1: This is just a proof of concept and doesn't really do anything useful in its current state
+2: it currently has no error checking so it's possible to get stuck in a while loop!
