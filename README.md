@@ -1,5 +1,14 @@
 DATCreator
 
+update 2019-12-27
+Updated with my latest dat compiler: archiver.cpp
+fully working and with demo code commented inside.
+
+I look back at what I wrote below and laugh to myself
+my dat compiler is now fully fledged and could be shipped!
+
+-----
+
 This simple program takes 2 example files, test1.ttf and test2.ttf.
 These are both TrueType Font files. If a single binary character is wrong, they are unreadable
 (and are therefore great for testing this program).
