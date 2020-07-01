@@ -1,4 +1,4 @@
-# Phragware Utlities: PhragDat
+# Phragware Utilities: PhragDat
 <br>PhragDat DataFile Manager
 <br/>C++17 for Windows 64-bit
 <br/>(c) Phragware 2020
