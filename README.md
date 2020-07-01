@@ -1,9 +1,8 @@
 # Phragware Utilities: PhragDat
+![PhragDatLogo](https://raw.githubusercontent.com/phraggers/PhragDat/master/PhragwareLogo.png)
 <br>PhragDat DataFile Manager
 <br/>C++17 for Windows 64-bit
 <br/>(c) Phragware 2020
-
-![PhragDatLogo](https://raw.githubusercontent.com/phraggers/PhragDat/master/PhragwareLogo.png)
 
 - Compile game or application data into a single .dat file for easy portability
 - Generates .dat data file and .c contents file
