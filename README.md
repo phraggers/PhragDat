@@ -76,6 +76,9 @@
 	- re-worked functionality, now only compiles .dat files and generates contents as a .c source code file for use in c/c++ apps/games
   - fixed/simplified/removed a lot of code that was kinda pointless (I guess that just happens when you are trying to figure out a method for accomplishing some programming task, pseudo code does not always translate into useful code!)
 
+- v5.1: 01-07-2020:
+	- Quick re-compilation for release v5, accidentally released DEBUG build. Whoops.
+
 <hr/>
 
 ## Data.dat file composition:

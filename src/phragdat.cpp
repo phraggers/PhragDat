@@ -7,8 +7,8 @@
 //====================================
 
 #define VER_MAJ 5
-#define VER_MIN 0
-#define DEBUG_MODE 1
+#define VER_MIN 1
+#define DEBUG_MODE 0
 
 #include "phragdat_headers.h"
 
