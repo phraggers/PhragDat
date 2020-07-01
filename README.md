@@ -1,6 +1,6 @@
 # Phragware Utlities: PhragDat
 <br>PhragDat DataFile Manager
-<br/>C++ for Windows 64-bit
+<br/>C++17 for Windows 64-bit
 <br/>(c) Phragware 2020
 
 - Compile game or application data into a single .dat file for easy portability
