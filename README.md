@@ -4,30 +4,23 @@
 <br/>(c) Phragware 2020
 
 - Compile game or application data into a single .dat file for easy portability
-- Takes a path to input directory and compiles all files and subdirectories which can then be extracted later back to their original state
-- Individual files and directories with their subdirectories can be extracted individually
+- Generates .dat data file and .c contents file
+- Takes a path to input directory and compiles all files and subdirectories which can then be accessed via contents C source code file
 - Files and directories can be excluded from input using a list of exceptions written to a txt file
 
 <hr/>
 
 ## Usage:
-	- Compile:  phragdat -c -i"input/dir" -o"path/to/output" (-f"exclusions.txt")
-	- Extract:  phragdat -e -i"input/dat.dat" -o"output/dir" (-f"dat/file/or/dir")
+	phragdat -i"input/dir" -d"path/to/output/dir" -c"path/to/output/dir" -e"exclusions.txt"(optional)
 
-## PhragDat modes of operation:
-
-### Compile:
-    compiles all contents of "path/to/input" and exports single .dat file
-    if output ends in .dat then output will write to the specified path
-    otherwise output will be named [input directory].dat
+### Compilation:
+    compiles all contents of "path/to/input" and exports single .dat file.
+    Output will be named [input directory].dat and .c respectively.
     optional exclusions text file: see below options for details
 
-### Extract:
-    extracts contents of .dat file to "path/to/directory"
-    Note: If you want to specify a specific file to extract with -f then the path
-    must be relative to the original compiled directory root, eg: -f"Directory/file.ext"
-    If you wish to specify a directory IT MUST END IN '/' TO SPECIFY A DIRECTORY!
-    eg: -f"Directory/SubDirectory1/TargetDirectory/"
+#### Contents .c:
+    contains mapping info and functions for C/C++ code to access files within the .dat file
+    list of files (path from .dat as root) with their address and length within .dat file
 
 #### Exclusions File:
     a simple text file with each new text line counting as an exclude.
@@ -79,58 +72,27 @@
 	- Fixed bug in PHD_Compile/PHDC_Data::Write() which was discarding current .dat file data and rewriting whenever Write() was called instead of appending to end of file.
   - Added EOF file check to make sure file (seems) complete before reading. The .dat file length is added as a uin64_t to the last 8 bytes of the dat file, so when reading, read the last 8 bytes as a uint64_t and compare to the actual file size. If they don't match up then the .dat file being read is probably corrupted. A checksum would do this better but I wanted to implement a simple check of my own devise.
 
+- v5.0: 01-07-2020:
+	- re-worked functionality, now only compiles .dat files and generates contents as a .c source code file for use in c/c++ apps/games
+  - fixed/simplified/removed a lot of code that was kinda pointless (I guess that just happens when you are trying to figure out a method for accomplishing some programming task, pseudo code does not always translate into useful code!)
+
 <hr/>
 
-## dat file composition:<br/>
+## Data.dat file composition:
 
-### header
-- tag
-- version
-- contents addresses
-
-### directory list
-- pathlength
-- paths
-
-### file index
-- pathlength
-- path
-- startaddress
-- length
+### header (8 bytes)
+- tag (6 bytes)
+- version (2 bytes)
 
 ### file data
 - binary data
 
+## Contents.c file composition:
+- a bunch of strings!
+- Info how to use at top, a few def/ifdefs
+- function/struct definitions
+- .dat file contents filled in a std::map
+
 <hr/>
-
-## OUTPUT DAT FILE COMPOSITION:<br/>
-
-- HEADER: 32 bytes
-	- TAG: 6 bytes
-		- 0x50 0x48 0x52 0x44 0x41 0x54 //ascii: "PHRDAT"
-	- VERSION: 2 bytes
-		- uint8_t VER_MAJ (1 byte)
-		- uint8_t VER_MIN (1 byte)
-	- CONTENTS_ADDRESSES: 24 bytes
-		- uint64_t DirectoryList_StartAddress (8 bytes)
-		- uint64_t FileIndex_StartAddress (8 bytes)
-		- uint64_t FileData_StartAddress (8 bytes)
-
-- DIRECTORY_LIST:
-	- PER DIRECTORY: ( (2 bytes + x bytes) * numDirectories)
-		- 2 bytes: uint16_t directory_path_length = x
-		- x bytes: char directory_path[x] (ascii)
-
-- FILE_INDEX:
-	- PER FILE: ( (2 bytes + x bytes + 8 bytes + 8 bytes) * numFiles)
-		- 2 bytes: uint16_t file_path_length = x
-		- x bytes: char file_path[x] (ascii)
-		- 8 bytes: uint64_t file_address
-		- 8 bytes: uint64_t file_length
-
-- FILE_DATA:
-	- PER FILE:
-		- binary file data
-<br/>
 first byte written is at address 0x00 (index 0, like C array)
 <hr/>
