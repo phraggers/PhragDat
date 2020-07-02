@@ -86,7 +86,7 @@ int PHD_COMPILE(std::string _Input, std::string _DatPath, std::string _CPath, st
   C_OutputPath = _CPath;
   if(C_OutputPath.back() != '/') C_OutputPath.push_back('/');
   C_OutputPath.append(Dat_SimpleName);
-  C_OutputPath.append(".c");
+  C_OutputPath.append(".csv");
 
   // OutputDat DEBUG report
   if(DEBUG_MODE) std::cout << "Dat_OutputPath: " << Dat_OutputPath << "\nDat_OutputName: " << Dat_OutputName << std::endl;
@@ -343,74 +343,39 @@ int PHD_COMPILE(std::string _Input, std::string _DatPath, std::string _CPath, st
   std::cout << Dat_OutputPath << " written" << std::endl;
   std::cout << "Writing: " << C_OutputPath << "..." << std::endl;
 
-  // write contents.c file (using fstream because its easier with c++ strings)
+  // write contents.csv file
   {
-    std::string DatIDTag = "PHR_DAT_" + Dat_SimpleName;
-    std::string Instructions = "/*\nTo use:\nint PHR_DatLoadFile(std::string _DatPath, std::string _File, std::string &Buffer);\nReturns 1 if there is an error, else Returns 0 on success and puts file data in Buffer\n*/\n";
+    FILE *ofile;
+    ofile = fopen(C_OutputPath.c_str(), "wb");
 
-    std::string PHR_DatLoadFile_Str;
+    if(ofile == NULL)
     {
-      std::stringstream ss;
-      ss << "int PHR_DatLoadFile(std::string _DatPath, std::string _File, std::string &Buffer) { std::string DatName; FILE *IDat; IDat = fopen(_DatPath.c_str(), \"rb\"); if(IDat == NULL) return 1; unsigned char HeaderTag[6]; unsigned char ExpectedHeaderTag[] = \"PHRDAT\"; fread(HeaderTag, 1, 6, IDat); for(int i=0; i<6; i++) if(HeaderTag[i] != ExpectedHeaderTag[i]) { fclose(IDat); return 1; } unsigned char Version[2]; unsigned char ExpectedVersion[] = {";
-      ss << DatIDTag << "_VER_MAJ, " << DatIDTag << "_VER_MIN}; fread(Version, 1, 2, IDat); for(int i=0; i<2; i++) if(Version[i] != ExpectedVersion[i]) { fclose(IDat); return 1; } fseek(IDat, PHR_Dats[DatName][_File].FileAddress, SEEK_SET); fread(&Buffer[0], 1, PHR_Dats[DatName][_File].FileLength, IDat); fclose(IDat); return 0;}";
-      PHR_DatLoadFile_Str = ss.str();
-    }
-
-    std::ofstream ofile;
-    ofile.open(C_OutputPath, std::ios::out | std::ios::binary);
-    if(!ofile.is_open())
-    {
-      std::cerr << "PhragDat error: failed to write " << C_OutputPath << ", check read/write privileges or spelling and try again, exiting..." << std::endl;
+      std::cerr << "PhragDat error: failed writing " << C_OutputPath << ", exiting..." << std::endl;
       return 1;
     }
 
-    ofile << Instructions << "\n#ifndef " << DatIDTag << "_c"
-    << "\n#define " << DatIDTag << "_c"
-    << "\n#define " << DatIDTag << "_VER_MAJ " << VER_MAJ
-    << "\n#define " << DatIDTag << "_VER_MIN " << VER_MIN
-    << "\n#ifdef PHR_DAT_MANAGER"
-    << "\nint " << DatIDTag << "_Included = " << DatIDTag << "AddToList();"
-    << "\n#endif //ifdef PHR_DAT_MANAGER"
-    << "\n#ifndef PHR_DAT_MANAGER\n#define PHR_DAT_MANAGER\n#include <string>\n#include <map>\n#include <cstdio>"
-    << "\nstruct PHR_DatFileContent { unsigned long long FileAddress; unsigned long long FileLength;};"
-    << "\nstd::map<std::string, std::map<std::string, PHR_DatFileContent>> PHR_Dats;"
-    << "\nint " << DatIDTag << "_Included = " << DatIDTag << "AddToList();"
-    << "\n" << PHR_DatLoadFile_Str << "\n#endif //ifndef PHR_DAT_MANAGER"
-    << "\nint " << DatIDTag << "AddToList() {";
-
-    for(int i=0; i<MasterFileList.size(); i++)
+    // write header
     {
-      ofile << "\nPHR_Dats[\"" << Dat_OutputName << "\"][\"" << MasterFileList[i].DatPath << "\"].FileAddress = 0x" << std::hex << (uint64_t)MasterFileList[i].Address << ";\nPHR_Dats[\"" << Dat_OutputName << "\"][\"" << MasterFileList[i].DatPath << "\"].FileLength = 0x" << std::hex << (uint64_t)MasterFileList[i].Length << ";";
+      std::stringstream ss;
+      ss << "\"PHRDAT\"," << (int)VER_MAJ << "," << (int)VER_MIN << "\n";
+      std::string FileContents = ss.str();
+      fwrite(&FileContents[0], 1, FileContents.length(), ofile);
     }
 
-    ofile << "\nreturn 1;}\n#endif //" << DatIDTag << "_c" << std::endl;
+    // write file contents
+    for(int i=0; i<MasterFileList.size(); i++)
+    {
+      std::stringstream ss;
+      ss << "\"" << MasterFileList[i].DatPath << "\"," << (uint64_t)MasterFileList[i].Address << "," << (uint64_t)MasterFileList[i].Length << "\n";
+      std::string FileContents = ss.str();
+      fwrite(&FileContents[0], 1, FileContents.length(), ofile);
+    }
 
-    ofile.close();
+    fclose(ofile);
+
   }
 
   std::cout << C_OutputPath << " written" << std::endl;
 
   return 0;
 }
-
-/*
-int PHR_DatLoadFile(std::string _DatPath, std::string _File, std::string &Buffer)
-{
-  std::string DatName;
-  FILE *IDat;
-  IDat = fopen(_DatPath.c_str(), "rb");
-  if(IDat == NULL) return 1;
-  unsigned char HeaderTag[6];
-  unsigned char ExpectedHeaderTag[] = "PHRDAT";
-  fread(HeaderTag, 1, 6, IDat);
-  for(int i=0; i<6; i++) if(HeaderTag[i] != ExpectedHeaderTag[i]) { fclose(IDat); return 1; }
-  unsigned char Version[2];
-  unsigned char ExpectedVersion[] = {VER_MAJ, VER_MIN};
-  fread(Version, 1, 2, IDat);
-  for(int i=0; i<2; i++) if(Version[i] != ExpectedVersion[i]) { fclose(IDat); return 1; }
-  fseek(IDat, PHR_Dats[DatName][_File].FileAddress, SEEK_SET);
-  fread(&Buffer[0], 1, PHR_Dats[DatName][_File].FileLength, IDat);
-  fclose(IDat);
-  return 0;
-}
-*/

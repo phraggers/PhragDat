@@ -4,6 +4,7 @@
 <br/>C++17 for Windows 64-bit
 <br/>(c) Phragware 2020
 
+
 - Compile game or application data into a single .dat file for easy portability
 - Generates .dat data file and .c contents file
 - Takes a path to input directory and compiles all files and subdirectories which can then be accessed via contents C source code file
@@ -80,6 +81,10 @@
 - v5.1: 01-07-2020:
 	- Quick re-compilation for release v5, accidentally released DEBUG build. Whoops.
 
+- v5.2: 02-07-2020:
+	- The generated c code was garbage so instead contents is now a simple .csv
+  - cleaned up some unused code from phragdat_funcs.h
+
 <hr/>
 
 ## Data.dat file composition:
@@ -91,12 +96,8 @@
 ### file data
 - binary data
 
-## Contents.c file composition:
-- a bunch of strings!
-- Info how to use at top, a few def/ifdefs
-- function/struct definitions
-- .dat file contents filled in a std::map
+## Contents.csv file composition:
+- First line: PHRDAT, uint8 major version, uint8 minor version
+- 1 line per file: "File Path within .dat", uint64 Address, uint64 Length
 
-<hr/>
-first byte written is at address 0x00 (index 0, like C array)
 <hr/>
