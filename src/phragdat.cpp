@@ -14,117 +14,117 @@
 
 int main(int argc, char **argv)
 {
-	if(argc < 2 || argc > 5)
-	{
-		std::cerr << PHD_UsageStr << std::endl;
-		return 1;
-	}
+  if(argc < 2 || argc > 5)
+  {
+    std::cerr << PHD_UsageStr << std::endl;
+    return 1;
+  }
 
-	std::string arg_input; // -i"path"
-	std::string arg_datpath; // -d"path"
-	std::string arg_cpath; // -c"path"
-	std::string arg_exclusions; // -e"path"
-	std::map<int,bool> argisproc; // check all args processed
+  std::string arg_input; // -i"path"
+  std::string arg_datpath; // -d"path"
+  std::string arg_cpath; // -c"path"
+  std::string arg_exclusions; // -e"path"
+  std::map<int,bool> argisproc; // check all args processed
 
   // process args
-	for(int i=1; i<argc; i++)
-	{
+  for(int i=1; i<argc; i++)
+  {
     std::string thisarg = argv[i];
-		argisproc[i] = 0;
+    argisproc[i] = 0;
 
-		// print help
-		if(thisarg[0] == '-' && thisarg[1] == 'h')
-		{
+    // print help
+    if(thisarg[0] == '-' && thisarg[1] == 'h')
+    {
       std::cout << PHD_HelpStr << std::endl;
-			return 0;
-		}
+      return 0;
+    }
 
-		// print version
-		if(thisarg[0] == '-' && thisarg[1] == 'v')
-		{
-			// set console page 850
-			UINT ConsolePage = GetConsoleOutputCP();
-			if(ConsolePage != 850) SetConsoleOutputCP(850);
+    // print version
+    if(thisarg[0] == '-' && thisarg[1] == 'v')
+    {
+      // set console page 850
+      UINT ConsolePage = GetConsoleOutputCP();
+      if(ConsolePage != 850) SetConsoleOutputCP(850);
 
-			//print version
+      //print version
       std::cout << PHD_GetVersion() << std::endl;
 
-			// return console page back to what it was
-			if(GetConsoleOutputCP() != ConsolePage) SetConsoleOutputCP(ConsolePage);
+      // return console page back to what it was
+      if(GetConsoleOutputCP() != ConsolePage) SetConsoleOutputCP(ConsolePage);
       return 0;
-		}
+    }
 
-		// set input
-		if(thisarg[0] == '-' && thisarg[1] == 'i')
-		{
-			if(thisarg.length() > 2)
-			{
+    // set input
+    if(thisarg[0] == '-' && thisarg[1] == 'i')
+    {
+      if(thisarg.length() > 2)
+      {
         for(int j=2; j<thisarg.length(); j++)
-				{
+        {
           arg_input.push_back(thisarg[j]);
-					argisproc[i] = 1;
-				}
-			}
-		}
+          argisproc[i] = 1;
+        }
+      }
+    }
 
-		// set datpath
-		if(thisarg[0] == '-' && thisarg[1] == 'd')
-		{
-			if(thisarg.length() > 2)
-			{
-				for(int j=2; j<thisarg.length(); j++)
-				{
-					arg_datpath.push_back(thisarg[j]);
-					argisproc[i] = 1;
-				}
-			}
-		}
+    // set datpath
+    if(thisarg[0] == '-' && thisarg[1] == 'd')
+    {
+      if(thisarg.length() > 2)
+      {
+        for(int j=2; j<thisarg.length(); j++)
+        {
+          arg_datpath.push_back(thisarg[j]);
+          argisproc[i] = 1;
+        }
+      }
+    }
 
-		// set cpath
-		if(thisarg[0] == '-' && thisarg[1] == 'c')
-		{
-			if(thisarg.length() > 2)
-			{
-				for(int j=2; j<thisarg.length(); j++)
-				{
-					arg_cpath.push_back(thisarg[j]);
-					argisproc[i] = 1;
-				}
-			}
-		}
+    // set cpath
+    if(thisarg[0] == '-' && thisarg[1] == 'c')
+    {
+      if(thisarg.length() > 2)
+      {
+        for(int j=2; j<thisarg.length(); j++)
+        {
+          arg_cpath.push_back(thisarg[j]);
+          argisproc[i] = 1;
+        }
+      }
+    }
 
-		// set exclusions
-		if(thisarg[0] == '-' && thisarg[1] == 'e')
-		{
-			if(thisarg.length() > 2)
-			{
-				for(int j=2; j<thisarg.length(); j++)
-				{
-					arg_exclusions.push_back(thisarg[j]);
-					argisproc[i] = 1;
-				}
-			}
-		}
+    // set exclusions
+    if(thisarg[0] == '-' && thisarg[1] == 'e')
+    {
+      if(thisarg.length() > 2)
+      {
+        for(int j=2; j<thisarg.length(); j++)
+        {
+          arg_exclusions.push_back(thisarg[j]);
+          argisproc[i] = 1;
+        }
+      }
+    }
 
-		// remove duplicate slashes in args
-		if(arg_input.length()) arg_input = PHD_EnsureSingleSlashes(arg_input);
-		if(arg_datpath.length()) arg_datpath = PHD_EnsureSingleSlashes(arg_datpath);
-		if(arg_cpath.length()) arg_cpath = PHD_EnsureSingleSlashes(arg_cpath);
-		if(arg_exclusions.length()) arg_exclusions = PHD_EnsureSingleSlashes(arg_exclusions);
+    // remove duplicate slashes in args
+    if(arg_input.length()) arg_input = PHD_EnsureSingleSlashes(arg_input);
+    if(arg_datpath.length()) arg_datpath = PHD_EnsureSingleSlashes(arg_datpath);
+    if(arg_cpath.length()) arg_cpath = PHD_EnsureSingleSlashes(arg_cpath);
+    if(arg_exclusions.length()) arg_exclusions = PHD_EnsureSingleSlashes(arg_exclusions);
 
-	}
+  }
 
-	// error for unused args
-	for(int i=1; i<argc; i++)
-	{
-		if(!argisproc[i])
-		{
+  // error for unused args
+  for(int i=1; i<argc; i++)
+  {
+    if(!argisproc[i])
+    {
       std::cerr << "PhragDat Error: unknown argument: " << argv[i] << std::endl;
-			return 1;
-		}
-	}
+      return 1;
+    }
+  }
 
-	int ecode = PHD_COMPILE(arg_input, arg_datpath, arg_cpath, arg_exclusions);
+  int ecode = PHD_COMPILE(arg_input, arg_datpath, arg_cpath, arg_exclusions);
 
-	return ecode;
+  return ecode;
 }
