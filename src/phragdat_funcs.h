@@ -14,7 +14,7 @@ std::string PHD_UsageStr =
 
 std::string PHD_HelpStr =
 "\n## Usage:\
-\n	phragdat -i\"input/dir\" -d\".dat output/dir\" -c\".c output/dir\" -e\"exclusions.txt\"(optional)\
+\n	phragdat -i\"input/dir\" -d\"dat/output/dir\" -c\"csv/output/dir\" -e\"exclusions.txt\"(optional)\
 \n\
 \n### Compilation:\
 \n    compiles all contents of \"path/to/input\" and exports single .dat file\

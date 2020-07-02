@@ -7,7 +7,7 @@
 //====================================
 
 #define VER_MAJ 5
-#define VER_MIN 2
+#define VER_MIN 3
 #define DEBUG_MODE 0
 
 #include "phragdat_headers.h"
@@ -31,6 +31,28 @@ int main(int argc, char **argv)
 	{
     std::string thisarg = argv[i];
 		argisproc[i] = 0;
+
+		// print help
+		if(thisarg[0] == '-' && thisarg[1] == 'h')
+		{
+      std::cout << PHD_HelpStr << std::endl;
+			return 0;
+		}
+
+		// print version
+		if(thisarg[0] == '-' && thisarg[1] == 'v')
+		{
+			// set console page 850
+			UINT ConsolePage = GetConsoleOutputCP();
+			if(ConsolePage != 850) SetConsoleOutputCP(850);
+
+			//print version
+      std::cout << PHD_GetVersion() << std::endl;
+
+			// return console page back to what it was
+			if(GetConsoleOutputCP() != ConsolePage) SetConsoleOutputCP(ConsolePage);
+      return 0;
+		}
 
 		// set input
 		if(thisarg[0] == '-' && thisarg[1] == 'i')
@@ -102,14 +124,7 @@ int main(int argc, char **argv)
 		}
 	}
 
-	// set console page 850 for standardized output
-	UINT ConsolePage = GetConsoleOutputCP();
-	if(ConsolePage != 850) SetConsoleOutputCP(850);
-
 	int ecode = PHD_COMPILE(arg_input, arg_datpath, arg_cpath, arg_exclusions);
-
-	// return console page back to what it was before phragdat ran, be nice to user :D
-	if(GetConsoleOutputCP() != ConsolePage) SetConsoleOutputCP(ConsolePage);
 
 	return ecode;
 }

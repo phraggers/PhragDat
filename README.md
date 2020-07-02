@@ -1,4 +1,4 @@
-# Phragware Utilities: PhragDat
+#Phragware Utilities: PhragDat
 ![PhragDatLogo](https://raw.githubusercontent.com/phraggers/PhragDat/master/PhragwareLogo.png)
 <br>PhragDat DataFile Manager
 <br/>C++17 for Windows 64-bit
@@ -84,6 +84,9 @@
 - v5.2: 02-07-2020:
 	- The generated c code was garbage so instead contents is now a simple .csv
   - cleaned up some unused code from phragdat_funcs.h
+
+- v5.3: 02-07-2020:
+	-  re-implemented the accidentally removed phragdat -h and -v options
 
 <hr/>
 
