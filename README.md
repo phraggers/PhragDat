@@ -6,7 +6,7 @@
 
 
 - Compile game or application data into a single .dat file for easy portability
-- Generates .dat data file and .c contents file
+- Generates .dat data file and .csv contents file
 - Takes a path to input directory and compiles all files and subdirectories which can then be accessed via contents C source code file
 - Files and directories can be excluded from input using a list of exceptions written to a txt file
 
