@@ -1,4 +1,4 @@
-#Phragware Utilities: PhragDat
+# Phragware Utilities: PhragDat
 ![PhragDatLogo](https://raw.githubusercontent.com/phraggers/PhragDat/master/PhragwareLogo.png)
 <br>PhragDat DataFile Manager
 <br/>C++17 for Windows 64-bit
