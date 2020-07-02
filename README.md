@@ -13,7 +13,7 @@
 <hr/>
 
 ## Usage:
-	phragdat -i"input/dir" -d".dat output/dir" -c".c output/dir" -e"exclusions.txt"(optional)
+	phragdat -i"input/dir" -d"dat/output/dir" -c"csv/output/dir" -e"exclusions.txt"(optional)
 
 ### Compilation:
     compiles all contents of "path/to/input" and exports single .dat file.
