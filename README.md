@@ -43,50 +43,54 @@
 
 ## Version History:<br/>
 
-- v0.1: 02-06-2020:
-	- basic functionality
+- v5.4: 31-08-2021:
+	- Changed some semantics stuff - names, types etc to be more uniform to my usual style
+  - Reduced everything to single file (Not sure why I had multiple .cpp/.h files before)
 
-- v1.0: 22-06-2020:
-	- Compile mode implemented
+- v5.3: 02-07-2020:
+	-  re-implemented the accidentally removed phragdat -h and -v options
 
-- v1.1: 24-06-2020:
-	- compile mode bug fixes
-	- code cleanup
+- v5.2: 02-07-2020:
+	- The generated c code was garbage so instead contents is now a simple .csv
+  - cleaned up some unused code from phragdat_funcs.h
 
-- v1.2: 25-06-2020:
-	- implemented compile mode exclusions: can now pass -f"exclusions.txt" and these exclusions will not be compiled into the output.dat
+- v5.1: 01-07-2020:
+	- Quick re-compilation for release v5, accidentally released DEBUG build. Whoops.
+
+- v5.0: 01-07-2020:
+	- re-worked functionality, now only compiles .dat files and generates contents as a .c source code file for use in c/c++ apps/games
+  - fixed/simplified/removed a lot of code that was kinda pointless (I guess that just happens when you are trying to figure out a method for accomplishing some programming task, pseudo code does not always translate into useful code!)
+
+- v4.1: 29-06-2020:
+	- Fixed bug in PHD_Compile/PHDC_Data::Write() which was discarding current .dat file data and rewriting whenever Write() was called instead of appending to end of file.
+  - Added EOF file check to make sure file (seems) complete before reading. The .dat file length is added as a uin64_t to the last 8 bytes of the dat file, so when reading, read the last 8 bytes as a uint64_t and compare to the actual file size. If they don't match up then the .dat file being read is probably corrupted. A checksum would do this better but I wanted to implement a simple check of my own devise.
+
+- v4.0: 29-06-2020:
+	- Decided to remove read and array modes, they dont work or dont fit the functionality, so i have decided to cleanup and call this 'DONE'!
+
+- v3.0: 28-06-2020:
+	- Read mode implemented
+
+- v2.1: 27-06-2020:
+	- Added option to select specific file or directory for extract mode with option -f"file/dir"
 
 - v2.0: 26-06-2020:
 	- Extract mode implemented
 	- much code cleanup
 	- buffer options removed, simplified buffers, sticking with 64-bit addresses/buffers (means memory usage could go up to 4.1GB in certain situations, but no big deal for most systems and windows probably deals with it anyway)
 
-- v2.1: 27-06-2020:
-	- Added option to select specific file or directory for extract mode with option -f"file/dir"
+- v1.2: 25-06-2020:
+	- implemented compile mode exclusions: can now pass -f"exclusions.txt" and these exclusions will not be compiled into the output.dat
 
-- v3.0: 28-06-2020:
-	- Read mode implemented
+- v1.1: 24-06-2020:
+	- compile mode bug fixes
+	- code cleanup
 
-- v4.0: 29-06-2020:
-	- Decided to remove read and array modes, they dont work or dont fit the functionality, so i have decided to cleanup and call this 'DONE'!
+- v1.0: 22-06-2020:
+	- Compile mode implemented
 
-- v4.1: 29-06-2020:
-	- Fixed bug in PHD_Compile/PHDC_Data::Write() which was discarding current .dat file data and rewriting whenever Write() was called instead of appending to end of file.
-  - Added EOF file check to make sure file (seems) complete before reading. The .dat file length is added as a uin64_t to the last 8 bytes of the dat file, so when reading, read the last 8 bytes as a uint64_t and compare to the actual file size. If they don't match up then the .dat file being read is probably corrupted. A checksum would do this better but I wanted to implement a simple check of my own devise.
-
-- v5.0: 01-07-2020:
-	- re-worked functionality, now only compiles .dat files and generates contents as a .c source code file for use in c/c++ apps/games
-  - fixed/simplified/removed a lot of code that was kinda pointless (I guess that just happens when you are trying to figure out a method for accomplishing some programming task, pseudo code does not always translate into useful code!)
-
-- v5.1: 01-07-2020:
-	- Quick re-compilation for release v5, accidentally released DEBUG build. Whoops.
-
-- v5.2: 02-07-2020:
-	- The generated c code was garbage so instead contents is now a simple .csv
-  - cleaned up some unused code from phragdat_funcs.h
-
-- v5.3: 02-07-2020:
-	-  re-implemented the accidentally removed phragdat -h and -v options
+- v0.1: 02-06-2020:
+	- basic functionality
 
 <hr/>
 
